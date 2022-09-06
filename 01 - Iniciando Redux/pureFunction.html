@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="redux.min.js"></script>
+    <title>Pure Function</title>
+  </head>
+  <body>
+    <div id="barra" style="background-color: blue; height: 90px"></div>
+
+    <script>
+      const WIDTH_TYPE = "WIDTH_TYPE";
+
+      function larguraWidth(payload) {
+        return { type: WIDTH_TYPE, payload };
+      }
+
+      function reducer(state = 0, action) {
+        switch (action.type) {
+          case WIDTH_TYPE:
+            return action.payload;
+          default:
+            return state;
+        }
+      }
+      function render() {
+        const barra = document.getElementById("barra");
+        const state = store.getState();
+        barra.style.width = state + "px";
+      }
+      const store = Redux.createStore(
+        reducer,
+        window.__REDUX_DEVTOOLS_EXTENSION__ &&
+          window.__REDUX_DEVTOOLS_EXTENSION__()
+      );
+      store.subscribe(render);
+      store.dispatch(larguraWidth(20));
+      store.dispatch(larguraWidth(50));
+    </script>
+  </body>
+</html>

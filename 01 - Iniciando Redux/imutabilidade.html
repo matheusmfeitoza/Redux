@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="immer.umd.production.min.js"></script>
+    <script src="redux.min.js"></script>
+    <title>Imutabilidade</title>
+  </head>
+  <body>
+    <script>
+      // Variável de type
+      const NAME = "NAME";
+      const IDADE = "IDADE";
+      //Action Function
+      function name(payload) {
+        return {
+          type: NAME,
+          payload,
+        };
+      }
+
+      function idade(payload) {
+        return { type: IDADE, payload };
+      }
+
+      //Estado inincial
+      const initialState = {
+        nome: "Matheus",
+        sobre: {
+          dados: {
+            idade: 20,
+          },
+        },
+      };
+      // Reducer usando o immer
+      const reducer = immer.produce((state, action) => {
+        switch (action.type) {
+          case NAME:
+            state.nome = action.payload;
+            break;
+          case IDADE:
+            state.sobre.dados.idade = action.payload;
+        }
+      }, initialState);
+      //Criando a store
+      const store = Redux.createStore(
+        reducer,
+        window.__REDUX_DEVTOOLS_EXTENSION__ &&
+          window.__REDUX_DEVTOOLS_EXTENSION__()
+      );
+      //Disparando evento
+      store.dispatch(name("Maria"));
+      store.dispatch(name("João"));
+      store.dispatch(idade(30));
+      console.log(store.getState());
+    </script>
+  </body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="redux.min.js"></script>
+    <title>Redux</title>
+  </head>
+  <body>
+    <div id="dados">
+      <span>TOTAL: </span>
+      <span id="total"></span>
+    </div>
+    <div>
+      <button id="btn">Somar</button>
+      <button id="incrementar">Incrementar</button>
+      <button id="decrementar">Decrementar</button>
+      <button id="abrir">Abrir</button>
+      <button id="fechar">Fechar</button>
+      <button id="parar">Parar tudo!</button>
+    </div>
+
+    <script>
+      //Criando os tipos padrões:
+      const SOMAR = "SOMAR";
+      const INCREMENTAR = "INCREMENTAR";
+      const DECREMENTAR = "DECREMENTAR";
+      const ABERTO = "ABERTO";
+      const FECHADO = "FECHADO";
+
+      // Criando as actions functions
+      function somar(payload) {
+        return { type: SOMAR, payload };
+      }
+
+      function incrementar() {
+        return { type: INCREMENTAR };
+      }
+
+      function decrementar() {
+        return { type: DECREMENTAR };
+      }
+
+      function aberto() {
+        return { type: ABERTO };
+      }
+
+      function fechado() {
+        return { type: FECHADO };
+      }
+
+      //Criando os Reducers
+
+      function contador(state = 0, action) {
+        switch (action.type) {
+          case SOMAR:
+            return (state = state + action.payload);
+          case INCREMENTAR:
+            return (state = state + 1);
+          case DECREMENTAR:
+            return (state = state - 1);
+          default:
+            return state;
+        }
+      }
+
+      function modal(state = false, action) {
+        switch (action.type) {
+          case ABERTO:
+            return (state = true);
+          case FECHADO:
+            return (state = false);
+          default:
+            return state;
+        }
+      }
+
+      // Criando o combine reducers e a store
+      const reducer = Redux.combineReducers({ modal, contador });
+      const store = Redux.createStore(reducer);
+
+      // Capturando os elementos de tela
+      const total = document.getElementById("total");
+      const btn = document.getElementById("btn");
+      const incr = document.getElementById("incrementar");
+      const decr = document.getElementById("decrementar");
+      const abr = document.getElementById("abrir");
+      const fchr = document.getElementById("fechar");
+
+      // criando eventListeners
+      btn.addEventListener("click", () => store.dispatch(somar(10)));
+      incr.addEventListener("click", () => store.dispatch(incrementar()));
+      decr.addEventListener("click", () => store.dispatch(decrementar()));
+      abr.addEventListener("click", () => store.dispatch(aberto()));
+      fchr.addEventListener("click", () => store.dispatch(fechado()));
+
+      // Criando função de observer com o subscribe
+
+      function renderContador() {
+        const state = store.getState();
+        total.innerText = state.contador;
+      }
+
+      const unsubscribe = store.subscribe(renderContador);
+
+      function renderModal() {
+        const dados = document.getElementById("dados");
+        const state = store.getState();
+
+        dados.style.display = state.modal ? "inline-block" : "none";
+      }
+      store.dispatch(somar(10));
+      store.dispatch(aberto());
+
+      const uns2 = store.subscribe(renderModal);
+
+      const stop = document.getElementById("parar");
+      stop.addEventListener("click", () => {
+        uns2(), unsubscribe();
+      });
+    </script>
+  </body>
+</html>

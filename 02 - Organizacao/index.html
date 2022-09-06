@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="immer.umd.production.min.js"></script>
+    <script src="redux.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="contador"><span class="contador_spn">0</span></div>
+      <div class="btn_wrapper">
+        <button id="btn1" class="btn">Incrementar</button>
+        <button id="btn2" class="btn">Decrementar</button>
+      </div>
+    </div>
+    <script type="module">
+      // Importações
+      import store from "./store/storeConfig.js";
+      import { incrementar, decrementar } from "./store/contador.js";
+
+      // Capturando botões
+      const btn1 = document.getElementById("btn1");
+      const btn2 = document.getElementById("btn2");
+
+      // Capturando o span para renderizar valores
+      const spn = document.querySelector(".contador_spn");
+
+      //Criando a função de render:
+      const render = () => {
+        const { contador } = store.getState();
+        spn.innerText = contador;
+      };
+
+      // Ativando o subscribe para observar as mudanças:
+
+      store.subscribe(render);
+
+      // Adicionando os eventos:
+      btn1.addEventListener("click", () => store.dispatch(incrementar()));
+      btn2.addEventListener("click", () => store.dispatch(decrementar()));
+    </script>
+  </body>
+</html>

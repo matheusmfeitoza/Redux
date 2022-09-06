@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="immer.umd.production.min.js"></script>
+    <script src="redux.min.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <title>Desafio redux</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div id="aluno"></div>
+      <div id="aulas"></div>
+    </div>
+
+    <script type="module">
+      import store from "./store/configureStore.js";
+      import {
+        incrementarTempo,
+        reduzirTempo,
+        modificarEmail,
+      } from "./store/alunos.js";
+
+      import {
+        completarAula,
+        completarCurso,
+        resetarCurso,
+      } from "./store/aula.js";
+      const render = () => {
+        // capturando onde vou renderizar o aluno
+        const alunoState = store.getState().alunoReducer;
+        const aluno = document.getElementById("aluno");
+        aluno.innerHTML = `<div class="alunosContent">
+            <p>Aluno: ${alunoState.nome}</p>
+            <p>Email: ${alunoState.email}</p>
+            <p>Dias restantes: ${alunoState.diasRestantes} </p>
+        </div>`;
+
+        //Capturando onde vou renderizar as aulas
+        const aulasState = store.getState().aulasReducer;
+        const aulas = document.getElementById("aulas");
+        aulas.innerText =
+          "Aulas completas: " +
+          aulasState.filter((aula) => aula.completa === true).length;
+      };
+      render();
+      store.subscribe(render);
+      store.dispatch(modificarEmail("mm@mm.com"));
+      store.dispatch(modificarEmail("kkk@kk.com"));
+      store.dispatch(completarAula(2));
+      store.dispatch(resetarCurso());
+      store.dispatch(completarCurso());
+    </script>
+  </body>
+</html>
+
+<!--// Usando o Redux (pode usar Immer ou Não).
+// Crie uma store contendo os estados iniciais abaixo
+// Crie as seguintes ações:
+// aluno/INCREMENTAR_TEMPO, adiciona 1 dia de acesso
+// aluno/REDUZIR_TEMPO, reduz 1 dia de acesso
+// aluno/MODIFICAR_EMAIL(email), modifica o email do usuário
+// aulas/COMPLETAR_AULA(id), completa a aula com base no ID passado
+// aulas/COMPLETAR_CURSO, completa todas as aulas
+// aulas/RESETAR_CURSO, reseta todas as aulas completas
+// Crie constantes e action creators para as ações.
+// Crie um reducer para aluno e um para aulas.
+// Renderize na tela o nome, email, tempo restante e o total de aulas completas
+// Configure a DevTools  -->
