@@ -6,7 +6,7 @@ Curso Origamid sobre Redux
 
 Primeiro instalamos a biblioteca ou usamos o arquivo do *Dist Folder* para praticar : [Link da dist Folder](https://unpkg.com/redux/dist/)
 
-Documentação para instalação via NPM, YARN e etc... [Documentação Redeux](https://redux.js.org/introduction/installation)
+Documentação para instalação via NPM, YARN e etc... [Documentação Redux](https://redux.js.org/introduction/installation)
 
 **Começando**:
 
